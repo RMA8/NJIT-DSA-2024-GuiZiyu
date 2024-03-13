@@ -1,9 +1,5 @@
 package oy.tol.tra;
 
-/**
- * A simple array of student grades to be used in testing
- * misbehaving algorithm for reversing the array.
- */
 public class Grades {
    
    private Integer [] grades = null;
@@ -19,9 +15,6 @@ public class Grades {
       }
    }
 
-   /**
-    * The method to reverse the internal Java int array.
-    */
    public void reverse() {
       /* TODO:
        1. Edit the test data files to see if the reverse() really works or not.
@@ -40,9 +33,6 @@ public class Grades {
      }
    }
 
-   /**
-    * Sorts the array to ascending order.
-    */
    public void sort() {
       /* TODO:
        1. Edit the test data files to see if the sort() really works or not.
@@ -63,10 +53,6 @@ public class Grades {
       }
    }
 
-   /**
-    * Returns the plain Java int [] array for investigation.
-    * @return The int array.
-    */
    public Integer [] getArray() {
       return grades;
    }

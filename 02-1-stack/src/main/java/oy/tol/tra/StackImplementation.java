@@ -53,13 +53,18 @@ public class StackImplementation<E> implements StackInterface<E> {
    @SuppressWarnings("unchecked")
    @Override
    public E pop() throws StackIsEmptyException {
-      
+      if () {
+         throw new StackIsEmptyException("the stack is empty");
+      }
    }
 
    @SuppressWarnings("unchecked")
    @Override
    public E peek() throws StackIsEmptyException {
-      
+      if () {
+         throw new StackIsEmptyException("the stack is empty");
+      }
+      return 
    }
 
    @Override
@@ -77,6 +82,7 @@ public class StackImplementation<E> implements StackInterface<E> {
    @Override
    public boolean isEmpty() {
       // TODO: Implement this
+      
       
    }
 

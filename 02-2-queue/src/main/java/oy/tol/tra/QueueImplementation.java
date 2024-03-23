@@ -35,19 +35,23 @@ public class QueueImplementation<E> implements QueueInterface<E> {
             throw new NullPointerException("Element is null");
         }
         if (size == capacity) {
-            int newCapacity = capacity * 2;
-            Object[] newArray = new Object[newCapacity];
-            for (int i = 0; i < size; i++) {
-                newArray[i] = itemArray[(head + i) % capacity];
-            }
-            itemArray = newArray;
-            head = 0;
-            tail = size;
-            capacity = newCapacity;
+            reallocate();
         }
         itemArray[tail] = element;
         tail = (tail + 1) % itemArray.length;
         size++;
+    }
+
+    private void reallocate() {
+        int newCapacity = capacity * 2;
+        Object[] newArray = new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newArray[i] = itemArray[(head + i) % capacity];
+        }
+        itemArray = newArray;
+        head = 0;
+        tail = size;
+        capacity = newCapacity;
     }
 
     /**
@@ -105,18 +109,15 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 
     @Override
     public String toString() {
-        if (isEmpty()) {
-            StringBuilder builder1 = new StringBuilder("[]");
-            return builder1.toString();
-        }
-        StringBuilder builder2 = new StringBuilder("[");
-        for (var index = 0; index < size; index++) {
-            builder2.append(itemArray[index].toString());
-            if (index < size) {
-                builder2.append(", ");
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(itemArray[(head + i) % capacity]);
+            if (i < size - 1) {
+                sb.append(", ");
             }
         }
-        builder2.append("]");
-        return builder2.toString();
+        sb.append("]");
+        return sb.toString();
     }
 }

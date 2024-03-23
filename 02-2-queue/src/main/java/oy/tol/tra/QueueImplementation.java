@@ -101,7 +101,7 @@ public class QueueImplementation<E> implements QueueInterface<E> {
             return builder1.toString();
         }
         StringBuilder builder2 = new StringBuilder("[");
-        for (var index = 0; index <= size; index++) {
+        for (var index = 0; index < size; index++) {
             builder2.append(itemArray[index].toString());
             if (index < size) {
                 builder2.append(", ");

@@ -7,9 +7,21 @@ public class QueueImplementation<E> implements QueueInterface<E> {
     private int head = 0;
     private int tail = 0;
 
-    public QueueImplementation() {
+    public QueueImplementation(int capacity) {
         itemArray = new Object[capacity];
         this.capacity = capacity;
+    }
+
+    public QueueImplementation(){
+        
+    }
+
+    /**
+    * For querying the current capacity of the queue.
+    @return The number of elements the queue can currently hold.
+    */
+    public int capacity(){
+        return capacity;
     }
 
     /**
@@ -39,6 +51,8 @@ public class QueueImplementation<E> implements QueueInterface<E> {
     * @return The element from the head of the queue.
     * @throws QueueIsEmptyException If the queue is empty.
     */
+    @SuppressWarnings("unchecked")
+    @Override
     public E dequeue() throws QueueIsEmptyException{
         if (isEmpty()) {
             throw new QueueIsEmptyException("Queue is empty");
@@ -55,18 +69,14 @@ public class QueueImplementation<E> implements QueueInterface<E> {
     * @return The element in the head of the queue.
     * @throws QueueIsEmptyException If the queue is empty.
     */
+    @SuppressWarnings("unchecked")
+    @Override
     public E element() throws QueueIsEmptyException{
         if (isEmpty()) {
             throw new QueueIsEmptyException("Queue is empty");
         }
         E element = (E) itemArray[head];
         return element;
-    }
-
-
-    @Override
-    public int capacity() {
-        return capacity;
     }
 
     @Override

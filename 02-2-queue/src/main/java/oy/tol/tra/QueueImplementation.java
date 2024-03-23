@@ -35,11 +35,15 @@ public class QueueImplementation<E> implements QueueInterface<E> {
             throw new NullPointerException("Element is null");
         }
         if (size == capacity) {
-            int newCapacity = capacity * 2; 
+            int newCapacity = capacity * 2;
             Object[] newArray = new Object[newCapacity];
-            System.arraycopy(itemArray, 0, newArray, 0, capacity);
+            for (int i = 0; i < size; i++) {
+                newArray[i] = itemArray[(head + i) % capacity];
+            }
             itemArray = newArray;
-            capacity = newCapacity; 
+            head = 0;
+            tail = size;
+            capacity = newCapacity;
         }
         itemArray[tail] = element;
         tail = (tail + 1) % itemArray.length;
@@ -91,7 +95,12 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 
     @Override
     public void clear(){
-    head = tail = 0;
+        for (int i = 0; i < capacity; i++) {
+            itemArray[i] = null;
+        }
+        head = 0;
+        tail = 0;
+        size = 0;
     }
 
     @Override

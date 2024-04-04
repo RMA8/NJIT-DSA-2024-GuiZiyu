@@ -8,7 +8,7 @@ public class DailyTasks {
 
    private QueueInterface<String> dailyTaskQueue = null;
    private Timer timer = null;
-   private static final int TASK_DELAY_IN_SECONDS = 1 * 1000;
+   private static final int TASK_DELAY_IN_SECONDS = 1000;
 
    private DailyTasks() {
    }

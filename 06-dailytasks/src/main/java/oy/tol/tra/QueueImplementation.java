@@ -33,12 +33,12 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 			throw new NullPointerException("Element cannot be NULL");
 		}
 		if (size == capacity) {
-		 relocate();
+		    relocate();
 		}
-		if (isEmpty()) {
-			head = tail = 0;
-		} else {
+		if (!isEmpty()) {
 			tail = (tail + 1) % capacity;
+		} else {
+			head = tail = 0;
 		}
 		itemArray[tail] = element;
 		size++;
@@ -48,7 +48,7 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 	@SuppressWarnings("unchecked")
 	public E dequeue() throws QueueIsEmptyException {
 		if (isEmpty()) {
-			throw new QueueIsEmptyException("Queue is empty");
+			throw new QueueIsEmptyException("Queue cannot be empty");
 		}
 		E element = (E) itemArray[head];
 		size--;
@@ -113,19 +113,19 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 	public String toString() {
 		StringBuilder builder = new StringBuilder("[");
 		if (!isEmpty()) {
-			if (head <= tail) {
-				for (int i = head; i <= tail; i++) {
+			if (head >= tail) {
+				for (int i = head; i < capacity; i++) {
+					builder.append(itemArray[i]);
+					builder.append(", ");
+				}
+				for (int i = 0; i <= tail; i++) {
 					builder.append(itemArray[i]);
 					if (i < tail) {
 						builder.append(", ");
 					}
 				}
 			} else {
-				for (int i = head; i < capacity; i++) {
-					builder.append(itemArray[i]);
-					builder.append(", ");
-				}
-				for (int i = 0; i <= tail; i++) {
+				for (int i = head; i <= tail; i++) {
 					builder.append(itemArray[i]);
 					if (i < tail) {
 						builder.append(", ");

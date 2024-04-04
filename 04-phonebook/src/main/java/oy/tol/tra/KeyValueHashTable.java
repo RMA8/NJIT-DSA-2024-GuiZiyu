@@ -40,7 +40,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 
     @Override
     public int size() {
-        return this.count;
+        return count;
     }
 
 
@@ -86,13 +86,27 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
     @Override
     public V find(K key) throws IllegalArgumentException {
         if (null == key) throw new IllegalArgumentException("Key to find cannot be null");
-        int i;
-        for( i = (key.hashCode() & 0x7fffffff)% values.length; values[i] != null; i = (i +1 ) % values.length){
-            if(values[i].getKey().equals(key)){ 
-                return values[i].getValue();
-            }
+        int index = findIndex(key);
+        if (index != -1) {
+            return values[index].getValue();
         }
         return null;
+    }
+    private int findIndex(K key) {
+        int index = key.hashCode()% values.length;
+        if(index<0){
+            index+= values.length;
+        }
+        int probingSteps = 0;
+        while (values[index] != null && !values[index].getKey().equals(key)) {
+            index = (index + 1) % values.length; // Linear probing
+            probingSteps++;
+        }
+        if (values[index] != null) {
+            collisionCount = Math.max(collisionCount, probingSteps);
+            return index;
+        }
+        return -1;
     }
 
     @Override

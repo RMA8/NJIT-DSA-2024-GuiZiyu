@@ -1,9 +1,6 @@
 package oy.tol.tra;
 
 public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary<K, V> {
-
-
-
     private Pair<K, V>[] values = null;
     private int count = 0;
     private int collisionCount = 0;
@@ -43,7 +40,6 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
         return count;
     }
 
-
     @Override
     public String getStatus() {
         StringBuilder builder = new StringBuilder();
@@ -58,34 +54,38 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 
     @Override
     public boolean add(K key, V value) throws IllegalArgumentException, OutOfMemoryError {
-
-        if (null == key || value == null) throw new IllegalArgumentException("Key or Value cannot be null");
+        if(key==null||value==null){
+            throw new IllegalArgumentException("not null");
+        }
         if (((double)count * (1.0 + LOAD_FACTOR)) >= values.length) {
             reallocate((int)((double)(values.length) * (1.0 / LOAD_FACTOR)));
         }
+        int index = key.hashCode()%values.length;
+        if(index<0){
+            index+= values.length;
+        }
 
-        // hash(key) = (hash(key) + MAX_INT) % MAX_INT 另一种哈希值的计算
-        int i;
-        int steps = 1;
-        for( i = (key.hashCode() & 0x7fffffff) % values.length; values[i] != null; i = (i +1 ) % values.length ,steps++){
-            if(values[i].getKey().equals(key)){ 
-                values[i].setValue(value);
+        int probingSteps = 0;
+        while (values[index] != null) {
+            if (values[index].getKey().equals(key)) {
+                values[index].setValue(value);
                 return true;
             }
+            index = (index + 1) % values.length; 
+            probingSteps++;
         }
-        if(i != (key.hashCode() & 0x7fffffff) % values.length) collisionCount++;
-        if(steps > maxProbingSteps) maxProbingSteps = steps;
-        values[i] = new Pair<K,V>(key, value);
+        values[index] = new Pair<>(key, value);
         count++;
-
-
-        
+        collisionCount = Math.max(collisionCount, probingSteps);
+        maxProbingSteps = Math.max(maxProbingSteps, probingSteps);
         return true;
     }
 
     @Override
     public V find(K key) throws IllegalArgumentException {
-        if (null == key) throw new IllegalArgumentException("Key to find cannot be null");
+        if(key==null){
+            throw new NullPointerException("not null");
+        }
         int index = findIndex(key);
         if (index != -1) {
             return values[index].getValue();
@@ -99,7 +99,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
         }
         int probingSteps = 0;
         while (values[index] != null && !values[index].getKey().equals(key)) {
-            index = (index + 1) % values.length; // Linear probing
+            index = (index + 1) % values.length; 
             probingSteps++;
         }
         if (values[index] != null) {

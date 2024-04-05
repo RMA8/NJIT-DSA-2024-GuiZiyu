@@ -1,22 +1,4 @@
 ** Analysing add(key, value) speed **
 testfile,bytes,elements,time (ms)
 Binary search tree:
-village.txt,4561,100,9
-small-town.txt,44892,1000,6
-town.txt,451617,10000,26
-large-town.txt,2255053,50000,107
-city.txt,4511688,100000,119
-large-city.txt,22554540,500000,649
-metropolis.txt,45107513,1000000,1563
-capital.txt,90209834,2000000,3333
-megalopolis.txt,227564229,5000000,9397
 Hashtable:
-village.txt,4561,100,1
-small-town.txt,44892,1000,2
-town.txt,451617,10000,17
-large-town.txt,2255053,50000,70
-city.txt,4511688,100000,130
-large-city.txt,22554540,500000,576
-metropolis.txt,45107513,1000000,1233
-capital.txt,90209834,2000000,2292
-megalopolis.txt,227564229,5000000,6008

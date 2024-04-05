@@ -31,14 +31,19 @@ public class Person implements Comparable<Person> {
         return getFullName();
     }
 
+    /**
+     * TODO: Implement the method below to return a hash value. It must be calculated from the
+     * first and last name of the person.
+     * @return Hash value of the person.
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
-        int hash = 5381;
+        int hash = 5381; 
         for (int i = 0; i < firstName.length(); i++) {
             hash = prime * hash + (int) firstName.charAt(i);
         }
-        hash = prime * hash + 31;
+        hash = prime * hash + 31; 
         for (int i = 0; i < lastName.length(); i++) {
             hash = prime * hash + (int) lastName.charAt(i);
         }
@@ -53,7 +58,19 @@ public class Person implements Comparable<Person> {
         return false;
     }
 
-
+    /**
+     * Compares two persons, this and the other one.
+     * <p>
+     * In a phonebook, persons are identified by the last and first names.
+     * So if a person is the same or another, depends on if they have
+     * the same name. You can use String.compareTo in implementing this.
+     * <p>
+     * Return <0 if the person's full name (as string) is smaller than the other's.
+     * Return 0 if the full name is identical.
+     * Return >0 if the other persons full name is larger (as string).
+     * Note: String class also implements <code>compareTo()</code> you can use here.
+     * @returns Returns 0 if persons are the same otherwise depending on the full name, <0 or >0.
+     */
     @Override
     public int compareTo(Person other) {
         return getFullName().compareTo(other.getFullName());

@@ -2,8 +2,6 @@ package oy.tol.tra;
 
 public class KeyValueBSearchTree<K extends Comparable<K>, V> implements Dictionary<K, V> {
 
-
-
     private TreeNode<K, V> root;
     private int count = 0;
     private int maxTreeDepth = 0;
@@ -15,9 +13,8 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V> implements Dictiona
 
     @Override
     public int size() {
-        return this.count;
+        return count;
     }
-
 
     @Override
     public String getStatus() {
@@ -31,31 +28,37 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V> implements Dictiona
         return toReturn;
     }
 
-
     @Override
     public boolean add(K key, V value) throws IllegalArgumentException, OutOfMemoryError {
-
-        if (null == key || value == null) {
-            throw new IllegalArgumentException("Key or Value cannot be null");
+        if (key == null || value == null){
+            throw new IllegalArgumentException("Key or value cannot be null");
         }
-        else if (null == this.root) {
-            this.root = new TreeNode<K,V>(key,value);
+        if (root == null) {
+            root = new TreeNode<>(key, value);
             count++;
             return true;
+        } else {
+            int insertionHash = key.hashCode();
+            int added = root.insert(key, value, insertionHash);
+            if (added == 1) {
+                count++;
+                return true;
+            } else {
+                return false;
+            }
         }
-        else{
-            int add = this.root.insert(key,value,key.hashCode());
-            count += add;
-            return true;
-        }
-        
     }
 
     @Override
     public V find(K key) throws IllegalArgumentException {
-        if (null == key) throw new IllegalArgumentException("Key to find cannot be null");
-        V value = this.root.find(key, key.hashCode());
-        return value;
+        if (key == null){
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        if (root == null){
+            return null;
+        }
+        int searchHash = key.hashCode();
+        return root.find(key, searchHash);
     }
 
     @Override
@@ -73,7 +76,5 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V> implements Dictiona
 
     @Override
     public void compress() throws OutOfMemoryError {
-
     }
-
 }

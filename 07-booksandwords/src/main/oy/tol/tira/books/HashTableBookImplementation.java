@@ -8,24 +8,24 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class HashTableBookImplementation implements Book {
-//----------------------------------------------------------
+
     private static final int MAX_WORDS = 100000;
     private static final int MAX_WORD_LEN = 100;
     private static final double LOAD_FACTOR = 0.45;
-//----------------------------------------------------------
+
     private WordCount[] words = null;
     private String bookFile = null;
     private String wordsToIgnoreFile = null;
     private WordFilter filter = null;
-//----------------------------------------------------------
+
     private int uniqueWordCount = 0;
     private int totalWordCount = 0;
     private int ignoredWordsTotal = 0;
-//----------------------------------------------------------
+
     private long collisionCount = 0;
     private long reallocationCount = 0;
     private int maxProbingSteps = 0;
-//-----------------------------------------------------------
+
     @Override
     public void setSource(String fileName, String ignoreWordsFile) throws FileNotFoundException {
         boolean success = false;
@@ -54,54 +54,39 @@ public class HashTableBookImplementation implements Book {
         if (bookFile == null || wordsToIgnoreFile == null) {
             throw new IOException("No file(s) specified");
         }
-        // Reset the counters
         uniqueWordCount = 0;
         totalWordCount = 0;
         collisionCount = 0;
         ignoredWordsTotal = 0;
-        // Create an array for the words.
         words = new WordCount[MAX_WORDS];
-        // Create the filter class to handle filtering.
         filter = new WordFilter();
-        // Read the words to filter.
         filter.readFile(wordsToIgnoreFile);
-
-        // Start reading from the book file using UTF-8.
         FileReader reader = new FileReader(bookFile, StandardCharsets.UTF_8);
         int c;
-        // Array holds the code points of the UTF-8 encoded chars.
         int[] array = new int[MAX_WORD_LEN];
         int currentIndex = 0;
         while ((c = reader.read()) != -1) {
-            // If the char is a letter, then add it to the array...
             if (Character.isLetter(c)) {
                 array[currentIndex] = c;
                 currentIndex++;
             } else {
                 if (currentIndex > 0) {
-                    // normalizing the word to lowercase.
                     String word = new String(array, 0, currentIndex).toLowerCase(Locale.ROOT);
-                    // Reset the counter for the next word read.
                     currentIndex = 0;
                     addToWords(new WordCount(word, 1));
                 }
             }
         }
-        // Must check the last word in the file too. There may be chars in the array 
-        // not yet handled, when read() returns -1 to indicate EOF.
         if (currentIndex > 1) {
             String word = new String(array, 0, currentIndex).toLowerCase(Locale.ROOT);
             addToWords(new WordCount(word, 1));
         }
-        // Close the file reader.
         reader.close();
     }
 
 
     private void addToWords(WordCount wordcount) throws OutOfMemoryError {
-        // Filter out too short words or words in filter list.
         if (!filter.shouldFilter(wordcount.word) && wordcount.word.length() >= 2) {
-            // Checks if the LOAD_FACTOR has been exceeded --> if so, reallocates to a bigger hashtable.
             if (((double)uniqueWordCount * (1.0 + LOAD_FACTOR)) >= words.length) {
                 reallocate((int)((double)(words.length) * (1.0 / LOAD_FACTOR)));
             }
@@ -111,19 +96,16 @@ public class HashTableBookImplementation implements Book {
             if(index<0){
                 index+=words.length;
             }
-            // if index was taken by different WordCount (collision), get new hash and index,
             int collisionusedIndex;
             int probingstep=0;
             for(int i=0;;i++){
                 collisionusedIndex=(index+i*i*i)%words.length;
                 if(words[collisionusedIndex]==null){
-                // insert into table when the index has a null in it,
                     words[collisionusedIndex]=wordcount;
                     uniqueWordCount++;
                     probingstep++;
                     break;
                 }else if(words[collisionusedIndex].word.equals(wordcount.word)){
-                    //find the same word,count++
                     words[collisionusedIndex].count+=1;
                     break;
                 }
@@ -174,7 +156,6 @@ public class HashTableBookImplementation implements Book {
         System.out.println("Listing words from a file: " + bookFile);
         System.out.println("Ignoring words from a file: " + wordsToIgnoreFile);
         System.out.println("Sorting the results...");
-        // First sort the array
         int length=Algorithms.partitionByRule(words, words.length, element->element==null);
         Arrayreallocate(length);
         Algorithms.fastSort(words);

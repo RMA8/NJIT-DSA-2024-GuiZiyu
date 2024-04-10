@@ -5,6 +5,7 @@ public class WordCount implements Comparable<WordCount> {
     int count;
     WordCount left;
     WordCount right;
+    Implementation<WordCount> list = null;
     int hash;
 
     public WordCount(){
@@ -30,6 +31,63 @@ public class WordCount implements Comparable<WordCount> {
         WordCount right=null;
         hash=hashCode();
     }
+
+    public static void binaryTreeToListArray(WordCount node) {
+        if (node == null)
+            return;
+        if(node.list!=null){
+            for (int i = 0; i < node.list.size(); i++) {
+                WordCount current = node.list.get(i);
+                BinarySearchTreeBookImplementation.words[BinarySearchTreeBookImplementation.indexOfWordCount++]=current;
+            }
+        }else{
+            BinarySearchTreeBookImplementation.words[BinarySearchTreeBookImplementation.indexOfWordCount++]=node;
+        }   
+
+        binaryTreeToListArray(node.left);
+        binaryTreeToListArray(node.right);
+    }
+
+
+ void insert(WordCount wordCount, int toInsertHash) throws RuntimeException {
+      if (toInsertHash < this.hash) {
+         if (null == left) {
+            left = wordCount;
+            BinarySearchTreeBookImplementation.uniqueWordCount++; 
+         } else {
+            left.insert(wordCount, toInsertHash);
+         }
+      } else if (toInsertHash > this.hash) {
+         if (null == right) {
+            right = wordCount;
+            BinarySearchTreeBookImplementation.uniqueWordCount++;
+         } else {
+            right.insert(wordCount, toInsertHash);
+         }
+      } else { 
+         if (this.equals(wordCount)){
+            this.count++;
+         } else {
+            if (null == list) {
+               list = new Implementation<>();
+               list.add(wordCount);
+               BinarySearchTreeBookImplementation.uniqueWordCount++;
+            } else {
+               WordCount newItem = wordCount;
+               int index = list.indexOf(newItem);
+               if (index < 0) {
+                  list.add(newItem);
+                  BinarySearchTreeBookImplementation.uniqueWordCount++;
+               } else {
+                  list.get(index).count++;
+               }
+            }
+            if (list.size() > BinarySearchTreeBookImplementation.maxProbingSteps) {
+                BinarySearchTreeBookImplementation.maxProbingSteps = list.size();
+            }
+         }
+      }
+   }
 
     public String getWord() {
         return word;
